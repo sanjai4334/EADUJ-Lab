@@ -1,4 +1,4 @@
-# RMI Application
+# RMI Application To manage Student Details Using SQL
 
 ## Setup Database
 ```sql
