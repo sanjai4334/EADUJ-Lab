@@ -7,11 +7,19 @@
     USE studentdb;
 
     CREATE TABLE students (
-        rollNum INT PRIMARY KEY,
-        name VARCHAR(100),
-        mobileNum VARCHAR(15),
-        yearOfStudy INT
+    rollNum VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    mobileNum VARCHAR(20) NOT NULL,
+    yearOfStudy INT NOT NULL
     );
+```
+
+## Edit Connection Details
+Edit `port` number, database : `name`, `username`, `password` in [StudentServiceImpl.java](./StudentServiceImpl.java#16).
+```java
+private static final String DB_URL = "jdbc:mysql://localhost:port/DBname";
+private static final String DB_USER = "username";
+private static final String DB_PASSWORD = "password";
 ```
 
 ## Set java path
@@ -42,7 +50,7 @@
 ## Run the project
 1. ### Compile The Java Files
     ```bash
-    javac *.java
+    javac -cp .;mysql-connector-j-9.0.0.jar *.java
     ```
 2. ### Start The RMI Registry
     ```bash
@@ -50,7 +58,7 @@
     ```
 3. ### Run the RMI Server
     ```bash
-    java StudentServiceImpl
+    java -cp .;mysql-connector-j-9.0.0.jar StudentServiceImpl
     ```
 4. ### Run the RMI Client
     Open another terminal and run the client.
