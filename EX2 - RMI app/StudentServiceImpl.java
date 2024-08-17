@@ -59,6 +59,52 @@ public class StudentServiceImpl extends UnicastRemoteObject implements StudentSe
         return sb.toString();
     }
 
+    @Override
+    public Student getStudent(String rollNum) throws RemoteException {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String query = "SELECT * FROM students WHERE rollNum = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, rollNum);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Student(rs.getString("rollNum"), rs.getString("name"), rs.getString("mobileNum"), rs.getInt("yearOfStudy"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void updateStudent(String rollNum, String name, String mobileNum, int yearOfStudy) throws RemoteException {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String query = "UPDATE students SET name = ?, mobileNum = ?, yearOfStudy = ? WHERE rollNum = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, name);
+            stmt.setString(2, mobileNum);
+            stmt.setInt(3, yearOfStudy);
+            stmt.setString(4, rollNum);
+            stmt.executeUpdate();
+            System.out.println("Student updated: Roll Number=" + rollNum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteStudent(String rollNum) throws RemoteException {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String query = "DELETE FROM students WHERE rollNum = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, rollNum);
+            stmt.executeUpdate();
+            System.out.println("Student deleted: Roll Number=" + rollNum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void main(String[] args) {
         try {
             // Create an instance of the implementation class
